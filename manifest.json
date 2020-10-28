@@ -1,0 +1,32 @@
+{
+  "name":"инстаграм бот",
+  "description":"Instagram extension",
+  "version":"1.0",
+  "manifest_version":2,
+  "icons": { "16": "./img/icon_small.png",
+    "48": "./img/icon_small.png",
+   "128": "./img/icon_small.png" },
+
+  "browser_action": {
+    "default_title": "Instagram",
+    "default_icon": "./img/icon_small.png",
+    "default_popup": "index.html"
+  },
+  "content_scripts": [
+    {
+      "matches":["https://www.instagram.com/*"],
+      "js":["index.js"],
+      "run_at":"document_end"
+    }
+  ],
+  "commands": {
+    "_execute_browser_action": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+F",
+        "mac": "MacCtrl+I"
+      },
+      "description": "Opens hello.html"
+    }
+  }
+
+}
