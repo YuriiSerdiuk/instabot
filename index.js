@@ -26,8 +26,12 @@ const closeIconListener = closeIcon.addEventListener("click", () => {
     like = document.getElementById("like_id"),
     check = document.getElementById("check_id"),
     subscribe = document.getElementById("subscribe_id"),
-    unsubscribe = document.getElementById("unsubscribe_id");
-  whiteListBlock = document.getElementById("whiteListBlock_id");
+    unsubscribe = document.getElementById("unsubscribe_id"),
+    setFollowersToLocalStorage = document.getElementById(
+      "setFolowerToStorage_id"
+    ),
+    remuveFolowingDeer = document.getElementById("remuveFolowingDeer_id"),
+    whiteListBlock = document.getElementById("whiteListBlock_id");
 
   removeElementFrpmDon(
     menu,
@@ -35,11 +39,13 @@ const closeIconListener = closeIcon.addEventListener("click", () => {
     like,
     subscribe,
     unsubscribe,
-    whiteListBlock
+    whiteListBlock,
+    setFollowersToLocalStorage,
+    remuveFolowingDeer
   );
 });
 
-const imgListener = img.addEventListener("click", () => {
+img.addEventListener("click", () => {
   div.style.position = "absolute";
   div.style.right = "0";
   div.style.top = "200px";
@@ -66,27 +72,51 @@ const imgListener = img.addEventListener("click", () => {
     button.addEventListener("click", listener);
     return button;
   }
-  const like = createButton("LIKE", "like_id", getFirstPostLike),
-    check = createButton("лайкает случайный", "check_id", () =>
-      checkAccaunt(init())
-    ),
-    subscribe = createButton(
-      "подписаться",
-      "subscribe_id",
-      getFollowersSubscribe
-    ),
+  const like = createButton("LIKE", "like_id", () => {
+      document.querySelector("#like_id").style.backgroundColor = "red";
+      getFirstPostLike();
+    }),
+    check = createButton("лайкает случайный", "check_id", () => {
+      document.querySelector("#check_id").style.backgroundColor = "red";
+      checkAccaunt(init());
+    }),
+    subscribe = createButton("подписаться", "subscribe_id", () => {
+      document.querySelector("#subscribe_id").style.backgroundColor = "red";
+      getFollowersSubscribe();
+    }),
     unsubscribe = createButton(
       "отписаться от неподписаных",
       "unsubscribe_id",
-      openReaders
+      () => {
+        document.querySelector("#unsubscribe_id").style.backgroundColor = "red";
+        openReaders();
+      }
+    ),
+    setFollowersToLocalStorage = createButton(
+      "записать подпискиков в локалсторедж",
+      "setFolowerToStorage_id",
+      () => {
+        document.querySelector(
+          "#setFolowerToStorage_id"
+        ).style.backgroundColor = "red";
+        setFollowersListToLocalStorage();
+      }
+    ),
+    remuveFolowingDeerWhoDontFollowYou = createButton(
+      "удалить юзеров которые на тебя не подписаны",
+      "remuveFolowingDeer_id",
+      () => {
+        document.querySelector("#remuveFolowingDeer_id").style.backgroundColor =
+          "red";
+        removeFollowingDeer();
+      }
     ),
     whiteListBlock = document.createElement("div"),
     input = document.createElement("input");
-  addPersoneToWhiteList = createButton(
-    "ADD",
-    "addToList_id",
-    functionAddPersoneToWhiteList
-  );
+  addPersoneToWhiteList = createButton("ADD", "addToList_id", () => {
+    document.querySelector("#addToList_id").style.backgroundColor = "red";
+    functionAddPersoneToWhiteList();
+  });
   whiteListBlock.id = "whiteListBlock_id";
   whiteListBlock.append(input, addPersoneToWhiteList);
   input.type = "text";
@@ -97,7 +127,16 @@ const imgListener = img.addEventListener("click", () => {
   closeIcon.style.position = "absolute";
   closeIcon.style.right = "10px";
   closeIcon.style.top = "-55px";
-  div.append(closeIcon, like, check, subscribe, unsubscribe, whiteListBlock);
+  div.append(
+    closeIcon,
+    like,
+    check,
+    subscribe,
+    unsubscribe,
+    setFollowersToLocalStorage,
+    remuveFolowingDeerWhoDontFollowYou,
+    whiteListBlock
+  );
   body.append(div);
 
   const menuIcon = document.getElementById("icon_id");
@@ -121,8 +160,6 @@ function functionAddPersoneToWhiteList() {
 //------------------------------------------------------------------------------------------------------------------------------------------
 // // выбирает первый пост
 function getFirstPostLike() {
-  document.querySelector("#like_id").style.backgroundColor = "red";
-
   setTimeout(() => {
     const div = document.querySelector("._9AhH0");
     div.click();
@@ -541,4 +578,78 @@ function removeElementFrpmDon(...args) {
 
 // получить число от диапазона
 const randomInteger = (min, max) =>
+  // рандом
   Math.floor(min + Math.random() * (max + 1 - min));
+
+// записує в локал сторедж тих , хто зп тобою слідкує
+function setFollowersListToLocalStorage() {
+  let nodeListButton = document.querySelectorAll(".-nal3");
+
+  if (nodeListButton && nodeListButton.length) {
+    // беремо айди листа пыдписчиків
+    const numberFolowers = getNumberFollowers(nodeListButton[1].text);
+    //відкриваємо список
+    nodeListButton[1].click();
+
+    setTimeout(() => {
+      // запускаємо прокрутку підписчиків
+      const list = document.querySelector(".isgrP");
+      let val1 = 0;
+      let val2 = 300;
+
+      let count = 0;
+      let folowersArrLength = document.querySelectorAll(".wo9IH").length;
+
+      const interval = setInterval(() => {
+        list.scrollTo(val1, val2);
+        val2 += 150;
+
+        if (count >= 10) {
+          const data = JSON.parse(localStorage.getItem("data"));
+          if (!data) {
+            localStorage.setItem("data", JSON.stringify([]));
+          }
+          setTimeout(() => {
+            const data = JSON.parse(localStorage.getItem("data"));
+            const user = document.querySelector(
+              "._7UhW9.fKFbl.yUEEX.KV-D4.fDxYl"
+            ).textContent;
+            const newData = [
+              ...data,
+              {
+                user: user,
+                folowersList: getNames(),
+                folowersLength: getNames()?.length,
+              },
+            ];
+            localStorage.setItem("data", JSON.stringify(newData));
+
+            document.querySelectorAll(".wpO6b")[1].click();
+          }, 1000);
+
+          return clearInterval(interval);
+        }
+
+        if (document.querySelectorAll(".wo9IH").length > folowersArrLength) {
+          count = 0;
+          folowersArrLength = document.querySelectorAll(".wo9IH").length;
+        } else {
+          count += 1;
+        }
+      }, 400);
+    }, 2000);
+  } else {
+    alert("setFollowersListToLocalStorage тут ошибка");
+  }
+}
+
+// видаляю тих ,хто за тобою не слідкує , працює з локал сторедж
+function removeFollowingDeer() {
+  const data = JSON.parse(localStorage.getItem("data"));
+  const userName = document.querySelector("._7UhW9.fKFbl.yUEEX.KV-D4.fDxYl")
+    .textContent;
+  if (data) {
+    const user = data.find((user) => user.user === userName);
+    user && openUserFollow(user.folowersList);
+  }
+}
