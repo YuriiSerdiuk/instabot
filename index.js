@@ -184,16 +184,19 @@ function show(min, max) {
   const time = randomInteger(min, max);
   setTimeout(function () {
     const likeButton = document.querySelector(".fr66n").children[0];
-    const likeSvg = likeButton.children[0];
+    const likeSvg = likeButton.children[0].children[0].children[0];
     const validate = likeSvg.getAttribute("fill") !== "#ed4956";
     const arrow = document.querySelector(".coreSpriteRightPaginationArrow");
 
     if (validate) {
       likeButton.click();
     }
-    arrow.click();
 
-    show(min, max);
+    setTimeout(() => {
+      arrow && arrow.click();
+
+      arrow && show(min, max);
+    }, 500);
   }, time);
 }
 
@@ -241,7 +244,7 @@ function getFirstPost() {
 //стравим лайк открывшему пользователю
 function likeFirstPhoto() {
   const likeButton = document.querySelector(".fr66n").children[0];
-  const likeSvg = likeButton.children[0];
+  const likeSvg = likeButton.children[0].children[0].children[0];
   const validate = likeSvg.getAttribute("fill") !== "#ed4956";
 
   if (validate) {
@@ -250,7 +253,7 @@ function likeFirstPhoto() {
 }
 
 // проверка на тип аккаунта
-async function checkAccaunt(arr) {
+function checkAccaunt(arr) {
   setTimeout(() => {
     try {
       if (checkPrivetAccaunt()) {
