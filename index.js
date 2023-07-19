@@ -68,33 +68,20 @@ img.addEventListener("click", () => {
   div.style.padding = "2%";
   div.id = "menu_id";
 
-  function createButton(textContent, id, listener) {
-    const button = document.createElement("BUTTON");
-    button.style.width = "100%";
-    button.style.borderRadius = "30px";
-    button.style.border = "none";
-    button.style.height = "40px";
-    button.style.marginBottom = "20px";
-    button.id = id;
-    button.textContent = textContent;
-    button.addEventListener("click", listener);
-    return button;
-  }
-
   //============
-  const like = createButton("LIKE", "like_id", () => {
+  const like = window.utils.createButton("LIKE", "like_id", () => {
       clearMenuStyle("#like_id");
       getFirstPostLike();
     }),
-    check = createButton("лайкает случайный", "check_id", () => {
+    check = window.utils.createButton("лайкает случайный", "check_id", () => {
       clearMenuStyle("#check_id");
       checkAccaunt(init());
     }),
-    subscribe = createButton("подписаться", "subscribe_id", () => {
+    subscribe = window.utils.createButton("подписаться", "subscribe_id", () => {
       clearMenuStyle("#subscribe_id");
       getFollowersSubscribe();
     }),
-    unsubscribe = createButton(
+    unsubscribe = window.utils.createButton(
       "отписаться от неподписаных",
       "unsubscribe_id",
       () => {
@@ -102,7 +89,7 @@ img.addEventListener("click", () => {
         openReaders();
       }
     ),
-    setFollowersToLocalStorage = createButton(
+    setFollowersToLocalStorage = window.utils.createButton(
       "записать подпискиков в локалсторедж",
       "setFolowerToStorage_id",
       () => {
@@ -110,7 +97,7 @@ img.addEventListener("click", () => {
         setFollowersListToLocalStorage();
       }
     ),
-    remuveFolowingDeerWhoDontFollowYou = createButton(
+    remuveFolowingDeerWhoDontFollowYou = window.utils.createButton(
       "удалить юзеров которые на тебя не подписаны",
       "remuveFolowingDeer_id",
       () => {
@@ -120,7 +107,7 @@ img.addEventListener("click", () => {
     ),
     whiteListBlock = document.createElement("div"),
     input = document.createElement("input");
-  const addPersoneToWhiteList = createButton("ADD", "addToList_id", () => {
+  const addPersoneToWhiteList = window.utils.createButton("ADD", "addToList_id", () => {
     clearMenuStyle("#addToList_id");
     functionAddPersoneToWhiteList();
   });
@@ -176,42 +163,42 @@ function getFirstPostLike() {
   setTimeout(() => {
     const posts = document.querySelectorAll(`.${window.nodeClassNames.posts}`);
     const firstPost = posts[0];
-    if(firstPost) {
-      console.log('open firstPost',firstPost);
+    if (firstPost) {
+      console.log('open firstPost', firstPost);
       firstPost.click();
-      show(3000, 7000);
-    }else {
+      runLikePostActionAndGoToNextPost(3000, 7000);
+    } else {
       throw new Error('cannot get first post in getFirstPostLike');
     }
   }, randomInteger(3241, 7021));
 }
 
-function show(min, max) {
-  setTimeout(function () {
-    const likeButton = document.querySelector(`.${window.nodeClassNames.likeIconParent}`).children[0];
+function runLikePostActionAndGoToNextPost(min, max) {
+  setTimeout(function() {
+    const likeButton = document.querySelector(`.${window.nodeClassNames.likeIconParent}`).children[0]
     const likeSvg = likeButton.querySelector('svg');
     const IsCanLikePost = likeSvg.getAttribute("aria-label") === "Подобається";
     const arrowButtons = document.querySelectorAll(`.${window.nodeClassNames.rightArrowButton}`);
     const disposeArrayArrowIcon = [];
-    arrowButtons.forEach((arrowElement)=> {
-      if(arrowElement.querySelector('svg').getAttribute("aria-label") === "Далі") {
+    arrowButtons.forEach((arrowElement) => {
+      if (arrowElement.querySelector('svg').getAttribute("aria-label") === "Далі") {
         disposeArrayArrowIcon.push(arrowElement)
       }
     })
 
     if (IsCanLikePost) {
-      console.log('IsCanLikePost',likeButton)
+      console.log('IsCanLikePost', likeButton)
       likeButton.click();
     }
 
     setTimeout(() => {
-      console.log('disposeArray',disposeArrayArrowIcon)
-      console.log('disposeArray-min-max',min,max)
-      if(disposeArrayArrowIcon.length){
+      console.log('disposeArray', disposeArrayArrowIcon)
+      console.log('disposeArray-min-max', min, max)
+      if (disposeArrayArrowIcon.length) {
         disposeArrayArrowIcon[0].click();
-        show(5000, 10000)
+        runLikePostActionAndGoToNextPost(5000, 10000)
       }
-    }, randomInteger(5013,10240));
+    }, randomInteger(5013, 10240));
   }, randomInteger(min, max));
 }
 
@@ -272,11 +259,11 @@ function checkAccaunt(arr) {
         console.log("Private accaunt");
         chooseFollowersInCloseAccount()
           ? setTimeout(() => {
-              checkAccaunt(init());
-            }, 5000)
+            checkAccaunt(init());
+          }, 5000)
           : () => {
-              console.log("users nont found in privet ackaunt");
-            };
+            console.log("users nont found in privet ackaunt");
+          };
       } else if (
         parseInt(arr[1].innerText) === 0 &&
         !checkPrivetAccaunt() &&
@@ -326,6 +313,7 @@ function checkAccaunt(arr) {
     }
   }, 5000);
 }
+
 function stsrtEgain() {
   const homeButton = document.querySelector(".cq2ai");
   homeButton.click();
@@ -422,7 +410,7 @@ function subscribe() {
   function show(min, max) {
     let time = randomInteger(min, max);
 
-    setTimeout(function () {
+    setTimeout(function() {
       if (!arr2[item].className.includes("_8A5w5")) {
         arr2[item].click();
         item++;
@@ -441,6 +429,7 @@ function subscribe() {
   }, 1000);
   //------------------------------------------------------------------------------------------------------------------------------------------
 }
+
 //unsubscribe  who dont subscribe
 
 // // открывает список пользователей кто подписан на тебя
@@ -499,6 +488,7 @@ function unsubscribeScroll() {
     }
   }, 400);
 }
+
 //скрол для тех на кого подписан
 
 function secontScroll(arr) {
@@ -543,6 +533,7 @@ function closeFolowersBlock(arr) {
     openUserFollow(arr);
   }, 2000);
 }
+
 // функция которая откроет список на кого я подписан
 function openUserFollow(arr) {
   // 6
@@ -609,7 +600,7 @@ function setFollowersListToLocalStorage() {
 
   if (nodeListButton && nodeListButton.length) {
     // беремо айди листа пыдписчиків
-     getNumberFollowers(nodeListButton[1].text);
+    getNumberFollowers(nodeListButton[1].text);
     //відкриваємо список
     nodeListButton[1].click();
 
@@ -690,6 +681,7 @@ function getCurrentUserName() {
   return document.querySelector("._7UhW9.fKFbl.yUEEX.KV-D4.fDxYl")
     .textContent;
 }
+
 // взяти всю дату
 function getData() {
   return JSON.parse(localStorage.getItem("data"));

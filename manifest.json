@@ -18,7 +18,7 @@
   "content_scripts": [
     {
       "matches":["https://www.instagram.com/*"],
-      "js":["constants.js","index.js"],
+      "js":["src/constants.js","src/utils.js","index.js"],
       "run_at":"document_end"
     }
   ],
