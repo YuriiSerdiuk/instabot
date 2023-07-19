@@ -120,7 +120,7 @@ img.addEventListener("click", () => {
     ),
     whiteListBlock = document.createElement("div"),
     input = document.createElement("input");
-  addPersoneToWhiteList = createButton("ADD", "addToList_id", () => {
+  const addPersoneToWhiteList = createButton("ADD", "addToList_id", () => {
     clearMenuStyle("#addToList_id");
     functionAddPersoneToWhiteList();
   });
@@ -171,33 +171,48 @@ function functionAddPersoneToWhiteList() {
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------
-// // выбирает первый пост
+// // open first element in table (image/video)
 function getFirstPostLike() {
   setTimeout(() => {
-    const div = document.querySelector("._9AhH0");
-    div.click();
-    show(6000, 10000);
-  }, 3000);
+    const posts = document.querySelectorAll(`.${window.nodeClassNames.posts}`);
+    const firstPost = posts[0];
+    if(firstPost) {
+      console.log('open firstPost',firstPost);
+      firstPost.click();
+      show(3000, 7000);
+    }else {
+      throw new Error('cannot get first post in getFirstPostLike');
+    }
+  }, randomInteger(3241, 7021));
 }
 
 function show(min, max) {
-  const time = randomInteger(min, max);
   setTimeout(function () {
-    const likeButton = document.querySelector(".fr66n").children[0];
-    const likeSvg = likeButton.children[0].children[0].children[0];
-    const validate = likeSvg.getAttribute("fill") !== "#ed4956";
-    const arrow = document.querySelector(".coreSpriteRightPaginationArrow");
+    const likeButton = document.querySelector(`.${window.nodeClassNames.likeIconParent}`).children[0];
+    const likeSvg = likeButton.querySelector('svg');
+    const IsCanLikePost = likeSvg.getAttribute("aria-label") === "Подобається";
+    const arrowButtons = document.querySelectorAll(`.${window.nodeClassNames.rightArrowButton}`);
+    const disposeArrayArrowIcon = [];
+    arrowButtons.forEach((arrowElement)=> {
+      if(arrowElement.querySelector('svg').getAttribute("aria-label") === "Далі") {
+        disposeArrayArrowIcon.push(arrowElement)
+      }
+    })
 
-    if (validate) {
+    if (IsCanLikePost) {
+      console.log('IsCanLikePost',likeButton)
       likeButton.click();
     }
 
     setTimeout(() => {
-      arrow && arrow.click();
-
-      arrow && show(min, max);
-    }, 500);
-  }, time);
+      console.log('disposeArray',disposeArrayArrowIcon)
+      console.log('disposeArray-min-max',min,max)
+      if(disposeArrayArrowIcon.length){
+        disposeArrayArrowIcon[0].click();
+        show(5000, 10000)
+      }
+    }, randomInteger(5013,10240));
+  }, randomInteger(min, max));
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -226,11 +241,11 @@ function getFollowers() {
 
 // // выбирает первый пост
 function getFirstPost() {
-  const post = document.querySelectorAll("._9AhH0");
-  const getNumber = randomInteger(1, post.length);
+  const posts = document.querySelectorAll(`.${window.nodeClassNames.posts}`);
+  const getNumber = randomInteger(1, posts.length);
 
   setTimeout(() => {
-    post[getNumber - 1].click();
+    posts[getNumber - 1].click();
     setTimeout(likeFirstPhoto, 2100);
     // setTimeout(closeLikedPost, 3400);
     setTimeout(getFollowers, 5000);
