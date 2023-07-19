@@ -220,15 +220,12 @@ function show(min, max) {
 // на страничке инициализирует кнопки , по которым брать доступ
 function init() {
   let menuButtomn,
-    posts,
-    followers,
-    following,
     arr = [];
   arr.push(
     (menuButtomn = document.querySelectorAll(".-nal3")),
-    (posts = menuButtomn[0]),
-    (followers = menuButtomn[1]),
-    (following = menuButtomn[2])
+    (menuButtomn[0]),
+    (menuButtomn[1]),
+    (menuButtomn[2])
   );
   return arr;
 }
