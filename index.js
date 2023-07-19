@@ -28,7 +28,7 @@ function showIcon() {
   body.append(img);
 }
 
-const closeIconListener = closeIcon.addEventListener("click", () => {
+closeIcon.addEventListener("click", () => {
   showIcon();
   const menu = document.getElementById("menu_id"),
     like = document.getElementById("like_id"),
@@ -464,7 +464,7 @@ function openReaders() {
 }
 
 // проскроливает открытый список
-function unsubscribeScroll(folowers) {
+function unsubscribeScroll() {
   // 3
   const list = document.querySelector(".isgrP");
   let val1 = 0;
@@ -504,7 +504,7 @@ function unsubscribeScroll(folowers) {
 }
 //скрол для тех на кого подписан
 
-function secontScroll(arr, folowers) {
+function secontScroll(arr) {
   let list = document.querySelector(".isgrP");
   let val1 = 0;
   let val2 = 300;
@@ -612,7 +612,7 @@ function setFollowersListToLocalStorage() {
 
   if (nodeListButton && nodeListButton.length) {
     // беремо айди листа пыдписчиків
-    const numberFolowers = getNumberFollowers(nodeListButton[1].text);
+     getNumberFollowers(nodeListButton[1].text);
     //відкриваємо список
     nodeListButton[1].click();
 
@@ -690,14 +690,12 @@ function removeFollowingDeer() {
 
 // взять им'я текущого користувача
 function getCurrentUserName() {
-  const userName = document.querySelector("._7UhW9.fKFbl.yUEEX.KV-D4.fDxYl")
+  return document.querySelector("._7UhW9.fKFbl.yUEEX.KV-D4.fDxYl")
     .textContent;
-  return userName;
 }
 // взяти всю дату
 function getData() {
-  const data = JSON.parse(localStorage.getItem("data"));
-  return data;
+  return JSON.parse(localStorage.getItem("data"));
 }
 
 function clearMenuStyle(params) {
